@@ -1,11 +1,14 @@
+import dotenv from 'dotenv';
+dotenv.config();
 import express from 'express';
 import mysql from 'mysql2';
 import cors from 'cors';
-import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
+import { placeOrder } from './controllers/orderController.js';
+import auth from './middleware/auth.js';
 
-dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -28,6 +31,8 @@ app.set('db', db);
 // Use the Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/cart', cartRoutes);
+app.post('/api/orders/place', auth, placeOrder);
 
 app.get('/', (req, res) => {
     res.send("Flipkart ES6 Backend is live!");

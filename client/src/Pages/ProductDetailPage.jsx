@@ -27,6 +27,25 @@ const ProductDetailPage = () => {
   if (loading) return <div className="p-10 text-center">Loading Product...</div>;
   if (!product) return <div className="p-10 text-center">Product not found.</div>;
 
+  const handleAddToCart = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert("Please login to add items to cart!");
+        return;
+    }
+
+    try {
+        const res = await axios.post('http://localhost:5000/api/cart/add', 
+            { product_id: product.id, quantity: 1 },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        alert(res.data.message);
+    } catch (err) {
+        console.error(err);
+        alert("Error adding to cart");
+    }
+};
+
   return (
     <div className="bg-white mt-2 p-3 sm:p-8 flex flex-col md:flex-row gap-8 shadow-sm rounded-sm">
       
@@ -41,7 +60,7 @@ const ProductDetailPage = () => {
         </div>
         
         <div className="flex gap-2 w-full">
-          <button className="flex-1 bg-[#ff9f00] text-white py-4 px-2 font-bold rounded-sm flex items-center justify-center gap-2 hover:bg-orange-500 transition shadow-md uppercase text-sm">
+          <button onClick={handleAddToCart} className="flex-1 bg-[#ff9f00] text-white py-4 px-2 font-bold rounded-sm flex items-center justify-center gap-2 hover:bg-orange-500 transition shadow-md uppercase text-sm">
             <FaShoppingCart /> Add to Cart
           </button>
           <button className="flex-1 bg-[#fb641b] text-white py-4 px-2 font-bold rounded-sm flex items-center justify-center gap-2 hover:bg-orange-600 transition shadow-md uppercase text-sm">
