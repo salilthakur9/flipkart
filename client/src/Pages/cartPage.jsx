@@ -3,7 +3,7 @@ import axios from 'axios';
 import { AiOutlineDelete } from "react-icons/ai";
 import { assets } from '../assets/assets';
 
-const cartPage = () => {
+const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const token = localStorage.getItem('token');
 
@@ -132,4 +132,4 @@ const handleOrderClick = () => {
   );
 };
 
-export default cartPage;
+export default CartPage;
