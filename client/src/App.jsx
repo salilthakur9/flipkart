@@ -4,7 +4,7 @@ import Footer from './components/Footer';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProductListingPage from './Pages/ProductListingPage';
 import ProductDetailPage from './pages/ProductDetailPage';
-import CartPage from './pages/CartPage';
+import CartPage from './pages/cartPage';
 
 function App() {
   return (
