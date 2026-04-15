@@ -1,5 +1,4 @@
 import React from 'react';
-// Using Tabler icons (Tb) because they have that perfect, thin, un-filled look
 import { 
   TbShoppingBag, TbShirt, TbDeviceMobile, TbSparkles, 
   TbDeviceLaptop, TbHome, TbDeviceTvOld, 
@@ -7,7 +6,7 @@ import {
 } from "react-icons/tb";
 
 const categories = [
-  { title: 'For You', Icon: TbShoppingBag, isActive: true }, // Added isActive flag
+  { title: 'For You', Icon: TbShoppingBag, isActive: true },
   { title: 'Fashion', Icon: TbShirt },
   { title: 'Mobiles', Icon: TbDeviceMobile },
   { title: 'Beauty', Icon: TbSparkles },
@@ -32,7 +31,6 @@ const CategoryBar = () => {
           return (
             <div 
               key={index} 
-              // Removed the group-hover colors and background circles
               className={`flex flex-col items-center justify-center cursor-pointer min-w-[65px] border-b-2 transition-all duration-200 
                 ${category.isActive ? 'border-[#2874f0] text-[#2874f0]' : 'border-transparent text-gray-800 hover:text-[#2874f0]'}`}
             >
