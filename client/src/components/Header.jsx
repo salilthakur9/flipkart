@@ -1,5 +1,5 @@
 import React from 'react';
-import { assets } from '../../assets/assets'; 
+import { assets } from '../assets/assets'; 
 import { IoAirplaneOutline } from "react-icons/io5";
 import { MdOutlineLocalGroceryStore } from "react-icons/md";
 import { FiSearch } from "react-icons/fi";
@@ -11,22 +11,18 @@ const Header = () => {
   return (
     <header className="bg-white px-3 sm:px-5 py-2 sm:py-3 border-b border-gray-200 font-sans sticky top-0 z-50">
       
+      {/* TOP ROW */}
       <div className="hidden md:flex justify-between items-center mb-3">
-        
         <div className="flex gap-4 items-center">
-          
           <img 
             src={assets.flipkartLogo} 
             alt="Flipkart" 
             className="h-8 w-auto object-contain cursor-pointer" 
-            onClick={() => console.log("Navigate to Home")} 
           />
-          
           <button className="flex items-center gap-2 px-4 py-1.5 bg-blue-50 rounded-full font-bold text-sm text-gray-700 hover:bg-gray-100 transition border-none cursor-pointer">
              <IoAirplaneOutline className="text-lg text-blue-600" />
              Travel
           </button>
-          
           <button className="flex items-center gap-2 px-4 py-1.5 bg-blue-50 rounded-full font-bold text-sm text-gray-700 hover:bg-gray-100 transition border-none cursor-pointer">
              <MdOutlineLocalGroceryStore className="text-lg text-green-600" />
              Grocery
@@ -42,8 +38,8 @@ const Header = () => {
         </div>
       </div>
 
+      {/* BOTTOM ROW */}
       <div className="flex flex-wrap md:flex-nowrap items-center gap-3 sm:gap-6 justify-between">
-        
         <div className="md:hidden flex items-center">
            <img 
             src={assets.flipkartLogo} 
@@ -62,7 +58,6 @@ const Header = () => {
         </div>
 
         <div className="order-2 flex items-center gap-4 sm:gap-8 text-sm sm:text-base text-gray-700">
-          
           <button className="flex items-center gap-1 sm:gap-2 hover:bg-[#2874f0] hover:text-white text-gray-800 px-2 sm:px-4 py-1.5 sm:py-2 rounded-md font-medium transition cursor-pointer">
             <FaRegUserCircle className="text-xl sm:text-xl" />
             <span className="hidden sm:inline">Login</span>
@@ -75,15 +70,10 @@ const Header = () => {
           </div>
           
           <div className="flex items-center gap-1 sm:gap-2 cursor-pointer hover:text-[#2874f0] transition font-medium">
-            <img 
-              src={assets.flipkartCart} 
-              alt="Cart" 
-              className="h-5 w-5 object-contain" 
-            />
+            <img src={assets.flipkartCart} alt="Cart" className="h-5 w-5 object-contain" />
             <span className="hidden sm:inline">Cart</span>
           </div>
         </div>
-
       </div>
     </header>
   );
