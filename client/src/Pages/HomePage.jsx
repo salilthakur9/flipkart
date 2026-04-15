@@ -3,6 +3,7 @@ import Header from '../components/Header';
 import CategoryBar from '../components/CategoryBar';
 import BannerCarousel from '../components/BannerCarousel';
 import ProductGrid from '../components/ProductGrid';
+import Feature from '../components/Feature';
 const HomePage = () => {
   return (
     <div className="min-h-screen bg-[#f1f2f4]">
@@ -12,6 +13,7 @@ const HomePage = () => {
         <CategoryBar />
         <BannerCarousel />
         <ProductGrid />
+        <Feature />
       </div>
     </div>
   );
