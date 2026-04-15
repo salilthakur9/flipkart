@@ -5,7 +5,6 @@ const Feature = () => {
   return (
     <div className="bg-white mt-2 sm:mt-4 p-5 sm:p-8 shadow-md mb-6 border border-gray-100 flex flex-col md:flex-row gap-8 sm:gap-12 items-stretch rounded-lg">
       
-      {/* LEFT SIDE: Jeans 1 Photo */}
       <div className="w-full md:w-3/5 flex justify-center items-center overflow-hidden rounded-md border border-gray-100 bg-gray-50">
         <img 
           src={assets.jeans1} 
@@ -14,7 +13,6 @@ const Feature = () => {
         />
       </div>
 
-      {/* RIGHT SIDE: Logo, Text, and Jeans Thumbnails */}
       <div className="w-full md:w-2/5 flex flex-col justify-center items-start pl-1 sm:pl-3">
         
         <img 
@@ -39,7 +37,6 @@ const Feature = () => {
           <img 
             src={assets.jeans2} 
             alt="Jeans Style 2" 
-            // Made it w-full and gave it a much taller h-48 or h-64 to match the new wide aspect ratio
             className="w-full h-48 sm:h-56 md:h-64 object-cover rounded-lg shadow-sm hover:scale-105 hover:shadow-md transition-all duration-300 cursor-pointer border-2 border-transparent hover:border-gray-200" 
           />
         </div>
