@@ -1,78 +1,42 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import ProductCard from './ProductCard';
-import { assets } from '../assets/assets';
 
-const products = [
-  {
-    id: 1,
-    title: "Reebok White Running Shoes",
-    price: "3,723",
-    originalPrice: "8,999",
-    discount: "58",
-    rating: "4.5",
-    reviews: "1,234",
-    image: assets.shoe1,
-    isAd: true,
-    isFreeDelivery: true
-  },
-  {
-    id: 2,
-    title: "Puma Blue Running Shoes",
-    price: "2,199",
-    originalPrice: "4,999",
-    discount: "56",
-    rating: "4.3",
-    reviews: "892",
-    image: assets.shoe2,
-    isAd: true,
-    isFreeDelivery: true
-  },
-  {
-    id: 3,
-    title: "REEBOK AeroSpeed Running...",
-    price: "3,723",
-    originalPrice: "8,999",
-    discount: "58",
-    rating: "4.4",
-    reviews: "4,521",
-    image: assets.shoe3,
-    isAd: false,
-    isFreeDelivery: true
-  },
-  {
-    id: 4,
-    title: "Nike Flex Run 2026",
-    price: "4,500",
-    originalPrice: "6,999",
-    discount: "35",
-    rating: "4.6",
-    reviews: "3,210",
-    image: assets.shoe4, 
-    isAd: false,
-    isFreeDelivery: true
-  },
-  {
-    id: 5,
-    title: "Adidas Ultraboost Light",
-    price: "8,999",
-    originalPrice: "12,999",
-    discount: "30",
-    rating: "4.8",
-    reviews: "5,671",
-    image: assets.shoe5, 
-    isAd: false,
-    isFreeDelivery: true
-  }
-];
+const ProductGrid = ({ category }) => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-const ProductGrid = () => {
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        // If category is provided (like 'fashion'), fetch that. 
+        // Otherwise, fetch all products for the 'Suggested' section.
+        const url = category 
+          ? `http://localhost:5000/api/products/category/${category}`
+          : `http://localhost:5000/api/products`;
+          
+        const res = await axios.get(url);
+        setProducts(res.data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [category]); // Re-runs if the category changes
+
+  if (loading) return <div className="p-10 text-center">Loading Products...</div>;
+
   return (
     <div className="bg-white mt-2 sm:mt-4 p-3 sm:p-4 shadow-sm mb-8">
-      
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg sm:text-xl font-bold text-gray-900">Suggested For You</h2>
-        <button className="bg-[#2874f0] text-white p-1.5 rounded-full shadow-md hover:bg-blue-700 transition">
-         
+        <h2 className="text-lg sm:text-xl font-bold text-gray-900">
+          {category ? `${category.toUpperCase()}` : "Suggested For You"}
+        </h2>
+        <button className="bg-[#2874f0] text-white p-1.5 rounded-full shadow-md">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
           </svg>
@@ -84,7 +48,6 @@ const ProductGrid = () => {
           <ProductCard key={product.id} product={product} />
         ))}
       </div>
-      
     </div>
   );
 };

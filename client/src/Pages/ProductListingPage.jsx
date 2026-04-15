@@ -1,50 +1,73 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { assets } from '../assets/assets';
 import ProductCard from '../components/ProductCard';
 import Header from '../components/Header';
+import axios from 'axios';
 
 const ProductListingPage = () => {
-  const { category } = useParams();
+  // 'category' will be 'sports' or 'fashion' based on the URL
+  const { category } = useParams(); 
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // This dummy data simulates 5 products per category
-  const categoryProducts = [
-    { id: 1, title: `${category} Premium Model 1`, price: "12,999", originalPrice: "15,000", discount: "15", rating: "4.2", reviews: "120", image: assets.support1 },
-    { id: 2, title: `${category} Standard Edition`, price: "8,499", originalPrice: "10,000", discount: "15", rating: "4.0", reviews: "85", image: assets.support2 },
-    { id: 3, title: `${category} Budget Friendly`, price: "4,200", originalPrice: "6,000", discount: "30", rating: "3.8", reviews: "210", image: assets.support3 },
-    { id: 4, title: `${category} Pro Max`, price: "25,000", originalPrice: "30,000", discount: "16", rating: "4.8", reviews: "500", image: assets.support4 },
-    { id: 5, title: `${category} Lite Version`, price: "2,999", originalPrice: "5,000", discount: "40", rating: "3.5", reviews: "45", image: assets.support5 },
-  ];
+useEffect(() => {
+    const fetchItems = async () => {
+        const res = await axios.get(`http://localhost:5000/api/products/category/${category}`);
+        setProducts(res.data);
+    };
+    fetchItems();
+}, [category]); // Runs every time you click a different category
+
+  useEffect(() => {
+    const fetchCategoryProducts = async () => {
+      setLoading(true);
+      try {
+        // This calls: http://localhost:5000/api/products/category/sports
+        const res = await axios.get(`http://localhost:5000/api/products/category/${category}`);
+        setProducts(res.data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Fetch error:", err);
+        setLoading(false);
+      }
+    };
+
+    if (category) {
+      fetchCategoryProducts();
+    }
+  }, [category]); // This triggers every time you click a new category in the bar
+
+  if (loading) return <div className="p-10 text-center text-lg">Loading {category}...</div>;
 
   return (
-    <>
-    <Header />
-    <div className="flex flex-col md:flex-row gap-4 mt-2">
-      {/* LEFT SIDE: Filters (Classic Flipkart Sidebar) */}
-      <div className="hidden md:block w-1/4 bg-white p-4 shadow-sm h-fit rounded-sm">
-        <h2 className="font-bold text-lg border-b pb-2 mb-4">Filters</h2>
-        <div className="mb-6">
-          <p className="text-xs font-bold uppercase text-gray-500 mb-2">Price Range</p>
-          <input type="range" className="w-full" />
-        </div>
-        <div className="mb-6">
-          <p className="text-xs font-bold uppercase text-gray-500 mb-2">Customer Ratings</p>
-          <label className="flex items-center gap-2 text-sm"><input type="checkbox" /> 4★ & above</label>
-        </div>
-      </div>
-
-      {/* RIGHT SIDE: Product List */}
-      <div className="flex-1 bg-white p-4 shadow-sm rounded-sm">
-        <h1 className="text-xl font-bold mb-4 capitalize">Showing results for "{category}"</h1>
+    <div className="bg-[#f1f2f4] min-h-screen p-2 sm:p-4">
+      <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row gap-4">
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {categoryProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+        {/* Sidebar */}
+        <div className="hidden md:block w-1/5 bg-white p-4 shadow-sm h-fit">
+          <h2 className="font-bold border-b pb-2 mb-4">Filters</h2>
+          <p className="text-xs font-bold text-gray-400 uppercase">Category</p>
+          <p className="text-[#2874f0] font-bold capitalize mt-1">{category}</p>
         </div>
+
+        {/* Product Grid */}
+        <div className="flex-1 bg-white p-4 shadow-sm min-h-[70vh]">
+          {products.length === 0 ? (
+            <div className="text-center py-20">
+              <p className="text-gray-500">No products found in "{category}" yet.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+              {products.map((item) => (
+                <ProductCard key={item.id} product={item} />
+              ))}
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
-    </>
   );
 };
 

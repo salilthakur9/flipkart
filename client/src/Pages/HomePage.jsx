@@ -1,10 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Header from '../components/Header';
 import CategoryBar from '../components/CategoryBar';
 import BannerCarousel from '../components/BannerCarousel';
 import ProductGrid from '../components/ProductGrid';
 import Feature from '../components/Feature';
+import axios from 'axios';
 const HomePage = () => {
+  useEffect(() => {
+  const fetchAll = async () => {
+    const res = await axios.get('http://localhost:5000/api/products'); // Fetch everything
+    setProducts(res.data);
+  };
+  fetchAll();
+}, []);
   return (
     <div className="min-h-screen bg-[#f1f2f4]">
       <Header />
