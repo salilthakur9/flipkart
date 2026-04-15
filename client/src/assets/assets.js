@@ -7,6 +7,11 @@ import banner3 from './banner3.jpeg';
 import banner4 from './banner4.jpeg';
 import banner5 from './banner5.jpeg';
 import banner6 from './banner6.jpeg';
+import shoe1 from './shoe1.jpeg';
+import shoe2 from './shoe2.jpeg';
+import shoe3 from './shoe3.jpeg';
+import shoe4 from './shoe4.jpeg';
+import shoe5 from './shoe5.jpeg';
 
 export const assets = {
   flipkartLogo: logo,
@@ -18,4 +23,5 @@ export const assets = {
   banner4,
   banner5,
   banner6,
+  shoe1,shoe2,shoe3,shoe4,shoe5,
 };
