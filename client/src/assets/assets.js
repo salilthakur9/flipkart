@@ -16,6 +16,11 @@ import jean from './jean.jpeg'; // American eagle logo
 import jeans1 from './jeans1.jpeg';
 import jeans2 from './jeans2.jpeg';
 import jeans3 from './jeans3.jpeg';
+import support1 from './support1.jpeg';
+import support2 from './support2.jpeg';
+import support3 from './support3.jpeg';
+import support4 from './support4.jpeg';
+import support5 from './support5.jpeg';
 
 export const assets = {
   flipkartLogo: logo,
@@ -29,4 +34,9 @@ export const assets = {
   banner6,
   shoe1,shoe2,shoe3,shoe4,shoe5,
   jean, jeans1, jeans2,jeans3,
+  support1,
+  support2,
+  support3,
+  support4,
+  support5,
 };

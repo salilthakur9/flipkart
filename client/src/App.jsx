@@ -1,16 +1,24 @@
 import React from 'react';
 import HomePage from './Pages/HomePage';
 import Footer from './components/Footer';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ProductListingPage from './Pages/ProductListingPage';
 
 function App() {
   return (
-    <div className="min-h-screen bg-[#f1f2f4]">
-        <div className="pt-2 px-2 sm:px-4">
-          <HomePage />
-          <Footer />
+    <Router>
+      <div className="min-h-screen bg-[#f1f2f4] flex flex-col">
+        <div className="max-w-[1400px] mx-auto w-full flex-grow">
+          <div className="pt-2 px-2 sm:px-4">
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/products/:category" element={<ProductListingPage />} />
+            </Routes>
+          </div>
         </div>
+        <Footer />
       </div>
-      
+    </Router>
   );
 }
 
