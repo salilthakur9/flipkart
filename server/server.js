@@ -29,6 +29,10 @@ const db = mysql.createPool({
 app.set('db', db);
 
 // Use the Routes
+app.use(cors({
+  origin: ['http://localhost:5173', 'https://your-frontend-link.vercel.app'], // Add your live link here
+  credentials: true
+}));
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
