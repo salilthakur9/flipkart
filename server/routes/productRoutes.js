@@ -3,8 +3,9 @@ import { getAllProducts, getProductsByCategory, getProductById } from '../contro
 
 const router = express.Router();
 
+// 🔥 IMPORTANT ORDER
 router.get('/', getAllProducts);
 router.get('/category/:category', getProductsByCategory);
-router.get('/item/:id', getProductById);
+router.get('/:id', getProductById); // ✅ clean route
 
 export default router;

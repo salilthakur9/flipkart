@@ -1,118 +1,128 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { AiFillThunderbolt } from "react-icons/ai";
-import { FaShoppingCart, FaStar } from "react-icons/fa";
+import { useParams } from 'react-router-dom';
+import Header from '../components/Header';
 import { assets } from '../assets/assets';
+
+const API = import.meta.env.VITE_API_URL;
 
 const ProductDetailPage = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem('token');
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/products/item/${id}`);
+        const res = await axios.get(`${API}/products/${id}`);
         setProduct(res.data);
-        setLoading(false);
       } catch (err) {
-        console.error("Error fetching product", err);
-        setLoading(false);
+        console.error(err);
       }
     };
+
     fetchProduct();
   }, [id]);
 
-  if (loading) return <div className="p-10 text-center">Loading Product...</div>;
-  if (!product) return <div className="p-10 text-center">Product not found.</div>;
-
+  // 🔥 ADD TO CART
   const handleAddToCart = async () => {
-    const token = localStorage.getItem('token');
     if (!token) {
-        alert("Please login to add items to cart!");
-        return;
+      alert("Please login first!");
+      return;
     }
 
     try {
-        const res = await axios.post('http://localhost:5000/api/cart/add', 
-            { product_id: product.id, quantity: 1 },
-            { headers: { Authorization: `Bearer ${token}` } }
-        );
-        alert(res.data.message);
+      await axios.post(
+        `${API}/cart/add`,
+        { product_id: product.id, quantity: 1 },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      alert("Added to cart!");
     } catch (err) {
-        console.error(err);
-        alert("Error adding to cart");
+      console.error(err);
+      alert("Failed to add to cart");
     }
-};
+  };
+
+  if (!product) return <div className="p-10 text-center">Loading...</div>;
 
   return (
-    <div className="bg-white mt-2 p-3 sm:p-8 flex flex-col md:flex-row gap-8 shadow-sm rounded-sm">
-      
-      {/* Left: Sticky Image Section */}
-      <div className="w-full md:w-2/5 flex flex-col gap-3">
-        <div className="border border-gray-200 p-4 flex justify-center items-center h-[400px]">
-          <img 
-            src={assets[product.image_url] || product.image_url} 
-            alt={product.title} 
-            className="max-h-full max-w-full object-contain"
-          />
-        </div>
-        
-        <div className="flex gap-2 w-full">
-          <button onClick={handleAddToCart} className="flex-1 bg-[#ff9f00] text-white py-4 px-2 font-bold rounded-sm flex items-center justify-center gap-2 hover:bg-orange-500 transition shadow-md uppercase text-sm">
-            <FaShoppingCart /> Add to Cart
-          </button>
-          <button className="flex-1 bg-[#fb641b] text-white py-4 px-2 font-bold rounded-sm flex items-center justify-center gap-2 hover:bg-orange-600 transition shadow-md uppercase text-sm">
-            <AiFillThunderbolt className="text-xl" /> Buy Now
-          </button>
-        </div>
-      </div>
+    <>
+      <Header />
 
-      {/* Right: Details Section */}
-      <div className="flex-1 flex flex-col gap-4">
-        <nav className="text-xs text-gray-500 flex gap-2">
-          <span>Home</span> {'>'} <span>{product.category}</span> {'>'} <span className="text-gray-900 font-medium">{product.title}</span>
-        </nav>
+      <div className="bg-[#f1f2f4] min-h-screen py-6 px-2 sm:px-8">
+        <div className="max-w-[1200px] mx-auto bg-white p-6 rounded shadow-sm flex flex-col lg:flex-row gap-10">
 
-        <h1 className="text-lg md:text-xl font-medium text-gray-900 leading-6">
-          {product.title}
-        </h1>
+          {/* LEFT: IMAGE */}
+          <div className="flex-1 flex justify-center items-center bg-white p-6 border rounded">
+            <img
+              src={assets[product.image_url] || assets.shoe1}
+              alt={product.title}
+              className="w-[300px] h-[300px] object-contain hover:scale-105 transition"
+            />
+          </div>
 
-        <div className="flex items-center gap-3">
-          <span className="bg-green-600 text-white text-xs font-bold px-1.5 py-0.5 rounded-sm flex items-center gap-1">
-            {product.rating} <FaStar className="text-[10px]" />
-          </span>
-          <span className="text-gray-500 text-sm font-bold">{product.reviews} Ratings & Reviews</span>
-        </div>
+          {/* RIGHT: DETAILS */}
+          <div className="flex-1 flex flex-col gap-4">
 
-        <div className="flex items-end gap-3 mt-2">
-          <span className="text-2xl md:text-3xl font-bold text-gray-900">₹{product.price}</span>
-          <span className="text-gray-500 line-through">₹{product.original_price}</span>
-          <span className="text-green-600 font-bold">{product.discount}% off</span>
-        </div>
+            <h1 className="text-2xl font-semibold">{product.title}</h1>
 
-        <div className="mt-4">
-          <h3 className="font-bold text-gray-900 mb-2">Description</h3>
-          <p className="text-sm text-gray-700 leading-relaxed">
-            {product.description || "No description available for this product. High-quality build and legendary performance guaranteed by the brand."}
-          </p>
-        </div>
+            {/* RATING */}
+            <div className="flex items-center gap-2">
+              <span className="bg-green-600 text-white text-sm px-2 py-1 rounded">
+                {product.rating} ★
+              </span>
+              <span className="text-gray-500 text-sm">
+                ({product.reviews} reviews)
+              </span>
+            </div>
 
-        {/* Offers placeholder like Flipkart */}
-        <div className="mt-4">
-          <h3 className="font-bold text-gray-900 mb-2">Available offers</h3>
-          <div className="flex flex-col gap-2">
-            {["Bank Offer 10% off on SBI Credit Card", "Special Price Get extra 20% off", "Partner Offer Sign up for Flipkart Pay Later"].map((offer, i) => (
-              <div key={i} className="flex items-center gap-2 text-sm text-gray-800">
-                <span className="text-green-600">🏷️</span> {offer}
-              </div>
-            ))}
+            {/* PRICE */}
+            <div className="flex items-center gap-3 mt-2">
+              <span className="text-3xl font-bold text-gray-900">
+                ₹{product.price}
+              </span>
+              <span className="text-gray-400 line-through">
+                ₹{product.original_price}
+              </span>
+              <span className="text-green-600 font-semibold">
+                {product.discount}% off
+              </span>
+            </div>
+
+            {/* DESCRIPTION */}
+            <p className="text-gray-600 text-sm mt-2">
+              {product.description}
+            </p>
+
+            {/* BUTTONS */}
+            <div className="flex gap-4 mt-6">
+              <button
+                onClick={handleAddToCart}
+                className="bg-[#ff9f00] text-white px-6 py-3 font-bold rounded hover:bg-[#fb8c00] transition"
+              >
+                ADD TO CART
+              </button>
+
+              <button
+                className="bg-[#fb641b] text-white px-6 py-3 font-bold rounded hover:bg-[#f05a18] transition"
+              >
+                BUY NOW
+              </button>
+            </div>
+
+            {/* EXTRA INFO */}
+            <div className="mt-6 text-sm text-gray-500">
+              <p>✔ 7 Days Replacement</p>
+              <p>✔ Cash on Delivery Available</p>
+              <p>✔ Free Delivery</p>
+            </div>
+
           </div>
         </div>
       </div>
-
-    </div>
+    </>
   );
 };
 

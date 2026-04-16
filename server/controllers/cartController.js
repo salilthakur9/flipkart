@@ -1,5 +1,3 @@
-
-
 // Get all items in the user's cart
 export const getCart = async (req, res) => {
     const user_id = req.user.id;
@@ -42,8 +40,26 @@ export const addToCart = async (req, res) => {
                 [user_id, product_id, quantity]
             );
         }
+
         res.status(200).json({ message: "Added to cart!" });
     } catch (err) {
         res.status(500).json({ error: "Failed to add to cart" });
+    }
+};
+
+// 🔥 REMOVE ITEM
+export const removeFromCart = async (req, res) => {
+    const { cart_id } = req.params;
+    const user_id = req.user.id;
+    const db = req.app.get('db');
+
+    try {
+        await db.promise().query(
+            "DELETE FROM cart WHERE id = ? AND user_id = ?",
+            [cart_id, user_id]
+        );
+        res.json({ message: "Item removed" });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to remove item" });
     }
 };
