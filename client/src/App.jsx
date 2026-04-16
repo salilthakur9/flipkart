@@ -8,6 +8,7 @@ import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
 import OrdersPage from './pages/OrderPage'; 
 import OrderSuccess from './pages/OrderSuccess';
+import SearchPage from './pages/SearchPage';
 import { useEffect } from 'react';
 import axios from 'axios';
 const API = import.meta.env.VITE_API_URL;
@@ -50,6 +51,7 @@ function App() {
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/orders" element={<OrdersPage />} />
               <Route path="/order-success/:id" element={<OrderSuccess />} />
+              <Route path="/search" element={<SearchPage />} />
             </Routes>
           </div>
         </div>

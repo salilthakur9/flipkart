@@ -43,3 +43,21 @@ export const getProductById = async (req, res) => {
         res.status(500).json({ error: "Failed to fetch product details" });
     }
 };
+
+export const searchProducts = async (req, res) => {
+  const { q } = req.query;
+  const db = req.app.get('db');
+
+  try {
+    const [rows] = await db.promise().query(
+      `SELECT * FROM products 
+       WHERE title LIKE ? 
+       OR category LIKE ?`,
+      [`%${q}%`, `%${q}%`]
+    );
+
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: "Search failed" });
+  }
+};

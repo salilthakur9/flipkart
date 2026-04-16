@@ -31,6 +31,7 @@ const Header = () => {
 
   window.location.reload();
 };
+const [query, setQuery] = useState('');
 
   return (
     <header className="bg-white px-3 sm:px-5 py-2 sm:py-3 border-b border-gray-200 sticky top-0 z-50">
@@ -76,9 +77,16 @@ const Header = () => {
         <div className="flex-1 flex items-center bg-blue-50 px-4 py-2 rounded-lg">
           <FiSearch />
           <input 
-            placeholder="Search for Products..."
-            className="bg-transparent outline-none w-full ml-2"
-          />
+  value={query}
+  onChange={(e) => setQuery(e.target.value)}
+  onKeyDown={(e) => {
+    if (e.key === 'Enter') {
+      navigate(`/search?q=${query}`);
+    }
+  }}
+  placeholder="Search for Products..."
+  className="bg-transparent outline-none w-full ml-2"
+/>
         </div>
 
         {/* RIGHT SIDE */}
