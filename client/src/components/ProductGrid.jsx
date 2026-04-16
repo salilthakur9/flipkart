@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ProductCard from './ProductCard';
 
+const API = import.meta.env.VITE_API_URL;
+
 const ProductGrid = ({ category }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,28 +12,28 @@ const ProductGrid = ({ category }) => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        // If category is provided (like 'fashion'), fetch that. 
-        // Otherwise, fetch all products for the 'Suggested' section.
         const url = category 
-          ? `http://localhost:5000/api/products/category/${category}`
-          : `http://localhost:5000/api/products`;
-          
+          ? `${API}/products/category/${category}`
+          : `${API}/products`;
+
         const res = await axios.get(url);
         setProducts(res.data);
-        setLoading(false);
       } catch (err) {
         console.error("Error fetching products:", err);
+      } finally {
         setLoading(false);
       }
     };
 
     fetchProducts();
-  }, [category]); // Re-runs if the category changes
+  }, [category]);
 
-  if (loading) return <div className="p-10 text-center">Loading Products...</div>;
+  if (loading) {
+    return <div className="p-10 text-center">Loading Products...</div>;
+  }
 
   return (
-    <div className="bg-white mt-2 sm:mt-4 p-3 sm:p-4 shadow-sm mb-8">
+    <div className="bg-white mt-2 sm:mt-4 p-3 sm:p-4 shadow-sm mb-8 rounded-md">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg sm:text-xl font-bold text-gray-900">
           {category ? `${category.toUpperCase()}` : "Suggested For You"}
@@ -43,11 +45,17 @@ const ProductGrid = ({ category }) => {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4">
-        {products.map(product => (
-          <ProductCard key={product.id} product={product} />
-        ))}
-      </div>
+      {products.length === 0 ? (
+        <div className="text-center py-10 text-gray-500">
+          No products found.
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4">
+          {products.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
