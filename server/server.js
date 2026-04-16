@@ -18,7 +18,7 @@ import cors from 'cors';
 import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
-import orderRoutes from './routes/orderRoutes.js'; // 🔥 NEW
+import orderRoutes from './routes/orderRoutes.js';
 
 const app = express();
 
@@ -27,26 +27,25 @@ const app = express();
 // =======================================================
 app.use(express.json());
 
-app.use(cors());
+app.use(cors({
+  origin: "*",
+  credentials: true
+}));
 
 // =======================================================
-// ✅ DEBUG ENV (OPTIONAL)
-// =======================================================
-console.log("ENV CHECK:");
-console.log("EMAIL_USER:", process.env.EMAIL_USER);
-console.log("EMAIL_PASS:", process.env.EMAIL_PASS);
-console.log("RAZORPAY_KEY_ID:", process.env.RAZORPAY_KEY_ID);
-
-// =======================================================
-// ✅ DATABASE CONNECTION
+// ✅ DATABASE CONNECTION (RAILWAY FIXED)
 // =======================================================
 const db = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
   waitForConnections: true,
   connectionLimit: 10,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 app.set('db', db);
@@ -57,13 +56,20 @@ app.set('db', db);
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
-app.use('/api/orders', orderRoutes); // 🔥 IMPORTANT
+app.use('/api/orders', orderRoutes);
 
 // =======================================================
 // ✅ ROOT
 // =======================================================
 app.get('/', (req, res) => {
   res.send("Backend running 🚀");
+});
+
+// =======================================================
+// ✅ HEALTH CHECK (optional but useful)
+// =======================================================
+app.get('/api/health', (req, res) => {
+  res.json({ status: "OK" });
 });
 
 // =======================================================
