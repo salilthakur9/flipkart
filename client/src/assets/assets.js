@@ -21,6 +21,11 @@ import support2 from './support2.jpeg';
 import support3 from './support3.jpeg';
 import support4 from './support4.jpeg';
 import support5 from './support5.jpeg';
+import book1 from './book1.jpeg';
+import book2 from './book2.jpeg';
+import book3 from './book3.jpeg';
+import book4 from './book4.jpeg';
+import book5 from './book5.jpeg';
 
 export const assets = {
   flipkartLogo: logo,
@@ -39,4 +44,9 @@ export const assets = {
   support3,
   support4,
   support5,
+  book1,
+book2,
+book3,
+book4,
+book5,
 };

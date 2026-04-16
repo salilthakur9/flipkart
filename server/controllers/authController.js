@@ -156,3 +156,69 @@ export const verifyOTP = async (req, res) => {
     res.status(500).json({ error: "Verification failed" });
   }
 };
+
+export const loginDirect = async (req, res) => {
+  const { email, password } = req.body;
+  const db = req.app.get('db');
+
+  try {
+    const [rows] = await db.promise().query(
+      "SELECT * FROM users WHERE email = ?",
+      [email]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const user = rows[0];
+
+    // ❗ simple match for guest
+    if (email === "guest@demo.com") {
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+        expiresIn: '1d'
+      });
+
+      return res.json({
+        token,
+        user: { id: user.id, name: user.name, email: user.email }
+      });
+    }
+
+    res.status(400).json({ error: "Use OTP login" });
+
+  } catch (err) {
+    res.status(500).json({ error: "Login failed" });
+  }
+};
+
+export const guestLogin = async (req, res) => {
+  const db = req.app.get('db');
+
+  try {
+    const [rows] = await db.promise().query(
+      "SELECT * FROM users WHERE email = ?",
+      ["guest@demo.com"]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Guest user not found" });
+    }
+
+    const user = rows[0];
+
+    const token = jwt.sign(
+      { id: user.id },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({
+      token,
+      user: { id: user.id, name: user.name, email: user.email }
+    });
+
+  } catch (err) {
+    res.status(500).json({ error: "Guest login failed" });
+  }
+};

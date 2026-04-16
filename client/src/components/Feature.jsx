@@ -22,7 +22,7 @@ const Feature = () => {
         />
         
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-950 mb-4 leading-tight">
-          Sydney's Denim Edit
+          Featured Product
         </h2>
         
         <p className="text-gray-700 mb-8 text-base sm:text-lg lg:text-xl leading-relaxed max-w-xl">

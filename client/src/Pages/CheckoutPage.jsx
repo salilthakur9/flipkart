@@ -37,9 +37,28 @@ const CheckoutPage = () => {
   };
 
   // 🔥 PAYMENT (NEXT STEP)
-  const handlePayment = async () => {
-    alert("Razorpay coming next 🚀");
-  };
+  const handlePlaceOrder = async () => {
+  try {
+    const fullAddress = `${address.name}, ${address.phone}, ${address.address}`;
+
+    const res = await axios.post(
+      `${API}/orders/place`,
+      {
+        total_amount: totalPrice,
+        address: fullAddress
+      },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    alert("Order Placed 🎉");
+
+    // 🔥 Redirect to confirmation page
+    window.location.href = `/order-success/${res.data.order_id}`;
+
+  } catch (err) {
+    alert("Order failed");
+  }
+};
 
   return (
     <>
@@ -91,11 +110,11 @@ const CheckoutPage = () => {
             </div>
 
             <button
-              onClick={handlePayment}
-              className="w-full bg-[#fb641b] text-white py-3 mt-6 font-bold"
-            >
-              Proceed to Payment
-            </button>
+  onClick={handlePlaceOrder}
+  className="w-full bg-[#fb641b] text-white py-3 mt-6 font-bold"
+>
+  Place Order
+</button>
           </div>
 
         </div>

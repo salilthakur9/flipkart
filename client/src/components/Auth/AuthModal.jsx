@@ -66,7 +66,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('user', JSON.stringify(res.data.user));
-
+      localStorage.removeItem('manualLogout');
       onClose();
       window.location.reload();
     } catch (err) {
