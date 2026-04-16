@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ProductListingPage from './pages/ProductListingPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import CartPage from './pages/CartPage'; // ✅ added
+import CheckoutPage from './pages/CheckoutPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               
               {/* ✅ CART ROUTE */}
               <Route path="/cart" element={<CartPage />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
             </Routes>
           </div>
         </div>

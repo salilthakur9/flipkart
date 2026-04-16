@@ -63,3 +63,26 @@ export const removeFromCart = async (req, res) => {
         res.status(500).json({ error: "Failed to remove item" });
     }
 };
+
+// 🔥 UPDATE QUANTITY
+export const updateCartQuantity = async (req, res) => {
+    const { cart_id, quantity } = req.body;
+    const user_id = req.user.id;
+    const db = req.app.get('db');
+
+    try {
+        // ❗ prevent invalid quantity
+        if (quantity < 1) {
+            return res.status(400).json({ error: "Quantity must be at least 1" });
+        }
+
+        await db.promise().query(
+            "UPDATE cart SET quantity = ? WHERE id = ? AND user_id = ?",
+            [quantity, cart_id, user_id]
+        );
+
+        res.json({ message: "Quantity updated" });
+    } catch (err) {
+        res.status(500).json({ error: "Failed to update quantity" });
+    }
+};

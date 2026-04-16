@@ -3,12 +3,14 @@ import axios from 'axios';
 import { AiOutlineDelete } from "react-icons/ai";
 import Header from '../components/Header';
 import { assets } from '../assets/assets';
+import { useNavigate } from 'react-router-dom';
 
 const API = import.meta.env.VITE_API_URL;
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([]);
   const token = localStorage.getItem('token');
+  const navigate = useNavigate();
 
   // 🔥 FETCH CART
   const fetchCart = async () => {
@@ -51,28 +53,27 @@ const CartPage = () => {
   );
 
   // 🔥 PLACE ORDER
-  const handlePlaceOrder = async () => {
-    try {
-      await axios.post(
-        `${API}/orders/place`,
-        { total_amount: totalPrice },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      alert("Order Placed!");
-      window.location.href = "/";
-    } catch (err) {
-      alert("Checkout failed.");
-    }
-  };
-
   const handleOrderClick = () => {
-    if (!token) {
-      alert("Please login first!");
-    } else {
-      handlePlaceOrder();
-    }
-  };
+  if (!token) {
+    alert("Please login first!");
+  } else {
+    navigate('/checkout');
+  }
+};
+
+  const handleQuantityChange = async (cart_id, newQuantity) => {
+  try {
+    await axios.put(
+      `${API}/cart/update`,
+      { cart_id, quantity: newQuantity },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+
+    fetchCart(); // refresh
+  } catch (err) {
+    console.error("Update failed", err);
+  }
+};
 
   return (
     <>
@@ -136,6 +137,28 @@ const CartPage = () => {
                         {item.discount}% off
                       </span>
                     </div>
+                    <div className="flex items-center gap-3 mt-4">
+
+  {/* ➖ BUTTON */}
+  <button
+    onClick={() => handleQuantityChange(item.cart_id, item.quantity - 1)}
+    className="w-8 h-8 border flex items-center justify-center font-bold"
+  >
+    -
+  </button>
+
+  {/* QUANTITY */}
+  <span className="px-3">{item.quantity}</span>
+
+  {/* ➕ BUTTON */}
+  <button
+    onClick={() => handleQuantityChange(item.cart_id, item.quantity + 1)}
+    className="w-8 h-8 border flex items-center justify-center font-bold"
+  >
+    +
+  </button>
+
+</div>
 
                     <button
                       onClick={() => handleRemove(item.cart_id)}
