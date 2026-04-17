@@ -26,6 +26,8 @@ import book2 from './book2.jpeg';
 import book3 from './book3.jpeg';
 import book4 from './book4.jpeg';
 import book5 from './book5.jpeg';
+import ritik1 from './ritik1.jpeg'
+import ritik2 from './ritik2.jpeg'
 
 export const assets = {
   flipkartLogo: logo,
@@ -49,4 +51,6 @@ book2,
 book3,
 book4,
 book5,
+ritik1,
+ritik2,
 };

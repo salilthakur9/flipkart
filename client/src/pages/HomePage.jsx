@@ -4,6 +4,7 @@ import CategoryBar from '../components/CategoryBar';
 import BannerCarousel from '../components/BannerCarousel';
 import ProductGrid from '../components/ProductGrid';
 import Feature from '../components/Feature';
+import FeatureMore from '../components/FeatureMore';
 
 const HomePage = () => {
   return (
@@ -15,6 +16,7 @@ const HomePage = () => {
         <BannerCarousel />
         <ProductGrid /> {/* already fetches products */}
         <Feature />
+        <FeatureMore />
       </div>
     </div>
   );
